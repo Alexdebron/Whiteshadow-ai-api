@@ -44,8 +44,7 @@ const venice = {
       .split("\n")
       .filter((c) => c)
       .map((c) => JSON.parse(c));
-    const answer = chunks.map((c) => c.content).join("");
-    return answer;
+    return chunks.map((c) => c.content).join("");
   },
 
   txt2img: async (prompt) => {
@@ -82,15 +81,11 @@ const venice = {
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
     fs.writeFileSync(filePath, res.data);
 
-    return {
-      status: true,
-      message: "Image generated successfully",
-      file: `/tmp/${fileName}`,
-    };
+    return { status: true, message: "Image generated successfully", file: `/tmp/${fileName}` };
   },
 };
 
-// ✅ Route 1: Chatbot
+// Chatbot route
 app.get("/chat", async (req, res) => {
   const q = req.query.q;
   if (!q) return res.json({ status: false, error: "Missing query ?q=" });
@@ -102,7 +97,7 @@ app.get("/chat", async (req, res) => {
   }
 });
 
-// ✅ Route 2: Text → Image
+// Text → Image route
 app.get("/image", async (req, res) => {
   const p = req.query.prompt;
   if (!p) return res.json({ status: false, error: "Missing prompt ?prompt=" });
@@ -114,7 +109,10 @@ app.get("/image", async (req, res) => {
   }
 });
 
-// 🔧 Use dynamic PORT for Vercel
+// Default route for testing
+app.get("/", (req, res) => res.json({ status: true, message: "Venice AI API is working!" }));
+
+// Dynamic port for Vercel
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`⚡ Venice API running on port ${PORT}`));
 
